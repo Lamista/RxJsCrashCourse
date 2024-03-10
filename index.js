@@ -4,6 +4,8 @@ const observable = new Observable((subscriber) => {
     //emit data
     //convention subscriber - but can be any name
     subscriber.next(10)
+    subscriber.next(11)
+    subscriber.next(12)
 })
 
 const observer = {
