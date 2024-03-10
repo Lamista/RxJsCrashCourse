@@ -1,4 +1,4 @@
-const { Observable, map } = require("rxjs");
+const { Observable, map, pluck, filter } = require("rxjs");
 
 const usersOK = {
     data: [
@@ -77,15 +77,14 @@ const usersTooYoung = {
 const observable = new Observable((subscriber) => {
     //emit data
     //convention subscriber - but can be any name
+    subscriber.next({ data: [] }) // will be filtered out
     subscriber.next(usersOK)
     subscriber.complete() // or next(usersTooYoung)
     subscriber.next(usersOK)
 }).pipe(
-    // extracts data from an object
-    map((value) => {
-        // console.log("1. Got data from observable", value);
-        return value.data;
-    }),
+    // extracts data from an object - pluck operator instead of map (in fact pluck is deprecated and map should be used)
+    pluck("data"),
+    filter((value) => value.length >= 5),
     map((value) => {
         // console.log("2. Got data from from first operator", value);
         return value.filter(user => user.status === 'active');
